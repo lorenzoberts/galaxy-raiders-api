@@ -20,10 +20,10 @@ data class Vector2D(val dx: Double, val dy: Double) {
     get() = atan2(this.dy,this.dx) * 180 / PI
 
   val unit: Vector2D
-    get() = INVALID_VECTOR
+    get() = this / (this.magnitude)
 
   val normal: Vector2D
-    get() = INVALID_VECTOR
+    get() = Vector2D(this.dy,-this.dx).unit
 
   operator fun times(scalar: Double): Vector2D {
     return Vector2D(this.dx * scalar, this.dy * scalar)
@@ -54,14 +54,14 @@ data class Vector2D(val dx: Double, val dy: Double) {
   }
 
   fun scalarProject(target: Vector2D): Double {
-    return INVALID_DOUBLE
+    return (this * target)/(target.magnitude)
   }
 
   fun vectorProject(target: Vector2D): Vector2D {
-    return INVALID_VECTOR
+    return target * (this * target)/(target.magnitude * target.magnitude)
   }
 }
 
 operator fun Double.times(v: Vector2D): Vector2D {
-  return INVALID_VECTOR
+  return v * this
 }
