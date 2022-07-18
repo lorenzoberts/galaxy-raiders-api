@@ -2,7 +2,11 @@
 package galaxyraiders.core.physics
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import kotlin.math.*
+import kotlin.math.PI
+import kotlin.math.atan2
+import kotlin.math.sqrt
+
+const val FACTOR = 180 / PI
 
 @JsonIgnoreProperties("unit", "normal", "degree", "magnitude")
 data class Vector2D(val dx: Double, val dy: Double) {
@@ -11,19 +15,19 @@ data class Vector2D(val dx: Double, val dy: Double) {
   }
 
   val magnitude: Double
-    get() = sqrt(this.dx*this.dx + this.dy*this.dy)
+    get() = sqrt(this.dx * this.dx + this.dy * this.dy)
 
   val radiant: Double
-    get() = atan2(this.dy,this.dx)
+    get() = atan2(this.dy, this.dx)
 
   val degree: Double
-    get() = atan2(this.dy,this.dx) * 180 / PI
+    get() = atan2(this.dy, this.dx) * FACTOR
 
   val unit: Vector2D
     get() = this / (this.magnitude)
 
   val normal: Vector2D
-    get() = Vector2D(this.dy,-this.dx).unit
+    get() = Vector2D(this.dy, -this.dx).unit
 
   operator fun times(scalar: Double): Vector2D {
     return Vector2D(this.dx * scalar, this.dy * scalar)
@@ -54,11 +58,11 @@ data class Vector2D(val dx: Double, val dy: Double) {
   }
 
   fun scalarProject(target: Vector2D): Double {
-    return (this * target)/(target.magnitude)
+    return (this * target) / (target.magnitude)
   }
 
   fun vectorProject(target: Vector2D): Vector2D {
-    return target * (this * target)/(target.magnitude * target.magnitude)
+    return target * (this * target) / (target.magnitude * target.magnitude)
   }
 }
 
