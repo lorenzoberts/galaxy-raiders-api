@@ -23,6 +23,7 @@ object SpaceFieldConfig {
   val asteroidMinMass = config.get<Int>("ASTEROID_MIN_MASS")
   val asteroidMaxMass = config.get<Int>("ASTEROID_MAX_MASS")
   val asteroidMassMultiplier = config.get<Double>("ASTEROID_MASS_MULTIPLIER")
+
 }
 
 @Suppress("TooManyFunctions")
@@ -32,11 +33,17 @@ data class SpaceField(val width: Int, val height: Int, val generator: RandomGene
   var asteroids: List<Asteroid> = emptyList()
     private set
 
+
   var missiles: List<Missile> = emptyList()
     private set
 
+// // // // // // // // // // // // 
+  var explosions: List<Explosion> = emptyList()
+    private set
+// // // // // // // // // // // // 
+
   val spaceObjects: List<SpaceObject>
-    get() = listOf(ship) + asteroids + missiles
+    get() = listOf(ship) + asteroids + missiles + explosions
 
   fun generateAsteroid() {
     asteroids += createAsteroidWithRandomProperties()
@@ -45,6 +52,21 @@ data class SpaceField(val width: Int, val height: Int, val generator: RandomGene
   fun generateMissile() {
     missiles += createMissile()
   }
+
+// // // // // // // // // // // // 
+  fun generateExplosion(){
+    explosions += createExplosion()
+  }
+
+  private fun createExplosion(): Explosion{
+    return Explosion(
+        initialPosition =Point2D(0.0,0.0),
+        initialVelocity =Vector2D(0.0,0.0),
+        radius = 0.0,
+        mass = 0.0,
+      )
+  }
+// // // // // // // // // // // // 
 
   private fun initializeShip(): SpaceShip {
     return SpaceShip(
