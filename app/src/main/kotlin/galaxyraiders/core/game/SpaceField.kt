@@ -66,7 +66,7 @@ data class SpaceField(val width: Int, val height: Int, val generator: RandomGene
     return Explosion(
       initialPosition = initialPos,
       initialVelocity = Vector2D(0.0, 0.0),
-      radius = 0.0,
+      radius = 1.0,
       mass = 0.0,
     )
   }

@@ -89,11 +89,14 @@ class GameEngine(
   fun handleCollisions() {
     this.field.spaceObjects.forEachPair {
         (first, second) ->
-      if (first.impacts(second)) {
-        first.collideWith(second, GameEngineConfig.coefficientRestitution)
+      if (first.impacts(second)) {        
         // // // // // // // // // // // //
         if (this.checkForExplosionCreation(first, second)) {
+          first.collideWith(second, 0.0)
           this.field.generateExplosionBetween(first.center, second.center)
+        }
+        else{
+         first.collideWith(second, GameEngineConfig.coefficientRestitution) 
         }
         // // // // // // // // // // // //
       }
