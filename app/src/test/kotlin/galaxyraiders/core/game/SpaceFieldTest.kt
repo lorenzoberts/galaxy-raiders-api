@@ -69,8 +69,7 @@ class SpaceFieldTest {
     )
   }
 
-
-// // // // // // // // // // // // 
+// // // // // // // // // // // //
 
   @Test
   fun `it starts with no explosions`() {
@@ -81,7 +80,7 @@ class SpaceFieldTest {
     )
   }
 
-// // // // // // // // // // // // 
+// // // // // // // // // // // //
 
   @Test
   fun `it has a list of objects with ship, asteroids, missiles and explosions`() {
@@ -92,15 +91,15 @@ class SpaceFieldTest {
 
     spaceField.generateMissile()
     val missile = spaceField.missiles.last()
-    
-    // // // // // // // // // // // // 
-    spaceField.generateExplosion()
+
+    // // // // // // // // // // // //
+    spaceField.generateExplosionAt()
     val explosion = spaceField.explosions.last()
 
     val expectedSpaceObjects = listOf<SpaceObject>(
       ship, asteroid, missile, explosion
     )
-    // // // // // // // // // // // // 
+    // // // // // // // // // // // //
 
     assertEquals(expectedSpaceObjects, spaceField.spaceObjects)
   }
@@ -202,6 +201,66 @@ class SpaceFieldTest {
       { assertTrue(asteroid.mass <= 1000) },
     )
   }
+
+// // // // // // // // // // // //
+
+  @Test
+  fun `it can generate a new explosion at the field's origin`() {
+    val numExplosions = spaceField.explosions.size
+
+    spaceField.generateExplosionAt()
+    val explosionAtOrigin = spaceField.explosions.last()
+
+    assertAll(
+      "SpaceField creates a new explosion at the correct position",
+      { assertTrue(explosionAtOrigin.center == Point2D(0.0, 0.0)) },
+      { assertTrue(spaceField.explosions.size == numExplosions + 1) },
+    )
+  }
+
+  @Test
+  fun `it can generate a new explosion at a fixed location`() {
+    val numExplosions = spaceField.explosions.size
+
+    spaceField.generateExplosionAt(Point2D(2.0, 3.0))
+    val explosion = spaceField.explosions.last()
+
+    assertAll(
+      "SpaceField creates a new explosion at the correct position",
+      { assertTrue(explosion.center == Point2D(2.0, 3.0)) },
+      { assertTrue(spaceField.explosions.size == numExplosions + 1) },
+    )
+  }
+
+  @Test
+  fun `it generates a new explosion between two given positions with positive coordinates`() {
+    val numExplosions = spaceField.explosions.size
+
+    spaceField.generateExplosionBetween(Point2D(1.0, 3.0), Point2D(3.0, 1.0))
+    val explosion2x2y = spaceField.explosions.last()
+
+    assertAll(
+      "SpaceField creates a new explosion at the correct position",
+      { assertTrue(explosion2x2y.center == Point2D(2.0, 2.0)) },
+      { assertTrue(spaceField.explosions.size == numExplosions + 1) },
+    )
+  }
+
+  @Test
+  fun `it generates a new explosion between two given positions with non-positive coordinates`() {
+    val numExplosions = spaceField.explosions.size
+
+    spaceField.generateExplosionBetween(Point2D(-1.0, 3.0), Point2D(3.0, -1.0))
+    val explosion1x1y = spaceField.explosions.last()
+
+    assertAll(
+      "SpaceField creates a new explosion at the correct position",
+      { assertTrue(explosion1x1y.center == Point2D(1.0, 1.0)) },
+      { assertTrue(spaceField.explosions.size == numExplosions + 1) },
+    )
+  }
+
+// // // // // // // // // // // //
 
   private companion object {
     @JvmStatic

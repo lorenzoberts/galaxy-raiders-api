@@ -91,9 +91,22 @@ class GameEngine(
         (first, second) ->
       if (first.impacts(second)) {
         first.collideWith(second, GameEngineConfig.coefficientRestitution)
+        // // // // // // // // // // // //
+        if (this.checkForExplosionCreation(first, second)) {
+          this.field.generateExplosionBetween(first.center, second.center)
+        }
+        // // // // // // // // // // // //
       }
     }
   }
+
+// // // // // // // // // // // //
+  fun checkForExplosionCreation(obj1: SpaceObject, obj2: SpaceObject): Boolean {
+    val obj1Asteroid = (obj1.type == "Asteroid")
+    val obj2Asteroid = (obj2.type == "Asteroid")
+    return (obj1Asteroid || obj2Asteroid) && !(obj1Asteroid && obj2Asteroid)
+  }
+// // // // // // // // // // // //
 
   fun moveSpaceObjects() {
     this.field.spaceObjects.forEach { it.move() }

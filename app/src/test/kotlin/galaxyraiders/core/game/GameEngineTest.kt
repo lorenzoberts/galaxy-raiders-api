@@ -1,5 +1,9 @@
 package galaxyraiders.core.game
 
+// // // // // // // // // // // //
+import galaxyraiders.core.physics.Point2D
+import galaxyraiders.core.physics.Vector2D
+// // // // // // // // // // // //
 import galaxyraiders.helpers.AverageValueGeneratorStub
 import galaxyraiders.helpers.ControllerSpy
 import galaxyraiders.helpers.MaxValueGeneratorStub
@@ -11,6 +15,9 @@ import org.junit.jupiter.api.assertAll
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
+// // // // // // // // // // // //
+import kotlin.test.assertTrue
+// // // // // // // // // // // //
 
 @DisplayName("Given a game engine")
 class GameEngineTest {
@@ -123,6 +130,26 @@ class GameEngineTest {
 
     assertNotEquals(asteroidsInitialVelocity, asteroidsFinalVelocity)
   }
+
+// // // // // // // // // // // //
+
+  @Test
+  fun `it correctly identifies when to generate an explosion`() {
+    val asteroid1 = Asteroid(Point2D(1.0, 1.0), Vector2D(0.0, 0.0), 0.0, 0.0)
+    val asteroid2 = Asteroid(Point2D(2.0, 2.0), Vector2D(0.0, 0.0), 0.0, 0.0)
+    val ship = SpaceShip(Point2D(3.0, 3.0), Vector2D(1.0, 1.0), 0.0, 0.0)
+    val missile = Missile(Point2D(4.0, 4.0), Vector2D(0.0, 1.0), 0.0, 0.0)
+
+    assertAll(
+      "it only creates explosions between asteroids and other objects",
+      { assertTrue(! hardGame.checkForExplosionCreation(asteroid1, asteroid2)) },
+      { assertTrue(hardGame.checkForExplosionCreation(asteroid1, ship)) },
+      { assertTrue(hardGame.checkForExplosionCreation(missile, asteroid2)) },
+      { assertTrue(! hardGame.checkForExplosionCreation(missile, ship)) }
+    )
+  }
+
+// // // // // // // // // // // //
 
   @Test
   fun `it can move its space objects`() {

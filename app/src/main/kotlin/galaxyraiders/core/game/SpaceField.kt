@@ -23,7 +23,6 @@ object SpaceFieldConfig {
   val asteroidMinMass = config.get<Int>("ASTEROID_MIN_MASS")
   val asteroidMaxMass = config.get<Int>("ASTEROID_MAX_MASS")
   val asteroidMassMultiplier = config.get<Double>("ASTEROID_MASS_MULTIPLIER")
-
 }
 
 @Suppress("TooManyFunctions")
@@ -33,14 +32,13 @@ data class SpaceField(val width: Int, val height: Int, val generator: RandomGene
   var asteroids: List<Asteroid> = emptyList()
     private set
 
-
   var missiles: List<Missile> = emptyList()
     private set
 
-// // // // // // // // // // // // 
+// // // // // // // // // // // //
   var explosions: List<Explosion> = emptyList()
     private set
-// // // // // // // // // // // // 
+// // // // // // // // // // // //
 
   val spaceObjects: List<SpaceObject>
     get() = listOf(ship) + asteroids + missiles + explosions
@@ -53,20 +51,26 @@ data class SpaceField(val width: Int, val height: Int, val generator: RandomGene
     missiles += createMissile()
   }
 
-// // // // // // // // // // // // 
-  fun generateExplosion(){
-    explosions += createExplosion()
+// // // // // // // // // // // //
+  fun generateExplosionBetween(pos1: Point2D, pos2: Point2D) {
+    val xCoord = (pos1.x + pos2.x) / 2
+    val yCoord = (pos1.y + pos2.y) / 2
+    generateExplosionAt(Point2D(xCoord, yCoord))
   }
 
-  private fun createExplosion(): Explosion{
-    return Explosion(
-        initialPosition =Point2D(0.0,0.0),
-        initialVelocity =Vector2D(0.0,0.0),
-        radius = 0.0,
-        mass = 0.0,
-      )
+  fun generateExplosionAt(position: Point2D = Point2D(0.0, 0.0)) {
+    explosions += createExplosion(position)
   }
-// // // // // // // // // // // // 
+
+  private fun createExplosion(initialPos: Point2D): Explosion {
+    return Explosion(
+      initialPosition = initialPos,
+      initialVelocity = Vector2D(0.0, 0.0),
+      radius = 0.0,
+      mass = 0.0,
+    )
+  }
+// // // // // // // // // // // //
 
   private fun initializeShip(): SpaceShip {
     return SpaceShip(
