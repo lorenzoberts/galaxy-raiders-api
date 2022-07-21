@@ -84,6 +84,9 @@ class GameEngine(
     this.handleCollisions()
     this.moveSpaceObjects()
     this.generateAsteroids()
+    // // // // // // // // // // // //
+    this.field.treatExplosions()
+    // // // // // // // // // // // //
   }
 
   fun handleCollisions() {

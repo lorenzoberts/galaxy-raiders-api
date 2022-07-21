@@ -70,6 +70,15 @@ data class SpaceField(val width: Int, val height: Int, val generator: RandomGene
       mass = 0.0,
     )
   }
+
+  fun treatExplosions() {
+    this.explosions = this.explosions.filter {
+      ! (it.isExpired())
+    }
+    this.explosions.forEach {
+      it.tick()
+    }
+  }
 // // // // // // // // // // // //
 
   private fun initializeShip(): SpaceShip {
