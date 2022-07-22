@@ -12,8 +12,7 @@ class Explosion(
   mass: Double
 ) :
   SpaceObject("Explosion", 'X', initialPosition, initialVelocity, radius, mass) {
-  private var ticksToLive = TTL
-
+  public var ticksToLive = TTL
   fun tick() {
     this.ticksToLive -= 1
   }

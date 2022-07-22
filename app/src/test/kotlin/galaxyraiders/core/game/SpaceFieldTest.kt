@@ -1,5 +1,6 @@
 package galaxyraiders.core.game
 
+import galaxyraiders.core.game.Explosion
 import galaxyraiders.core.physics.Point2D
 import galaxyraiders.core.physics.Vector2D
 import galaxyraiders.helpers.AverageValueGeneratorStub
@@ -18,6 +19,10 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+
+// // // // 
+import kotlin.test.assertFalse
+// // // //
 @DisplayName("Given a space field")
 class SpaceFieldTest {
   private val generator: RandomGenerator = AverageValueGeneratorStub()
@@ -259,6 +264,48 @@ class SpaceFieldTest {
       { assertTrue(spaceField.explosions.size == numExplosions + 1) },
     )
   }
+
+
+  @Test
+  fun `it generates a new explosion between two given positions with both non-positive coordinates`() {
+    val numExplosions = spaceField.explosions.size
+
+    spaceField.generateExplosionBetween(Point2D(-1.0, -3.0), Point2D(-3.0, -1.0))
+    val explosion1x1y = spaceField.explosions.last()
+
+    assertAll(
+      "SpaceField creates a new explosion at the correct position",
+      { assertTrue(explosion1x1y.center == Point2D(-2.0, -2.0)) },
+      { assertTrue(spaceField.explosions.size == numExplosions + 1) },
+    )
+  }
+
+
+  @Test
+  fun `it generates an explosion and excludes it after a value of ticks`() {
+    val numExplosions = spaceField.explosions.size
+
+    spaceField.generateExplosionBetween(Point2D(1.0, 3.0), Point2D(3.0, 1.0))
+    val explosion1x1y = spaceField.explosions.last()
+
+    assertAll(
+      "SpaceField creates the new explosion ",
+      { assertTrue(spaceField.explosions.size == numExplosions+1) },
+    )
+
+    val ttl = explosion1x1y.ticksToLive
+
+    for (i in 0 until ttl+1){
+        spaceField.treatExplosions()
+    }
+
+    assertAll(
+      "SpaceField removes the explosion",
+      { assertTrue(spaceField.explosions.size == numExplosions) },
+    )
+  }
+
+
 
 // // // // // // // // // // // //
 
