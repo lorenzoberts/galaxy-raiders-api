@@ -288,10 +288,11 @@ class SpaceFieldTest {
       { assertTrue(spaceField.explosions.size == numExplosions + 1) },
     )
 
-    val ttl = explosion1x1y.ticksToLive
+    var ttl = explosion1x1y.ticksToLive
 
-    for (_ in 0 until ttl + 1) {
+    while (ttl >= 0) {
       spaceField.treatExplosions()
+      ttl -= 1
     }
 
     assertAll(
